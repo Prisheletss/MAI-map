@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>МАИ | Молодёжная</title>
+    <title>Poisk</title>
+    <style>
+         .knopka_ayditorii 
+        {
+            padding: 8px 16px;
+            font-size: 16px;
+        }
+        /*фон*/
+        body 
+        {
+            position: relative;
+            background: linear-gradient(180deg, #FFFFFF, #2600FF);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        /*контейнер карты*/
+        .map_container 
+        {
+            width: 1000px;
+            height: 700px;
+            border: 1px solid #2f61a8;
+            background: #fff;
+            overflow: auto;
+            position: relative;
+        }
+        /*картинка в контейнер*/
+        .map_container img 
+        {
+            transform-origin: 0 0;
+            display: block;
+        }
+        /*расположение эмблемы*/
+        .top-right-emblem 
+        {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 90px;
+            height: auto;
+        }
+        /*центрирование юлока*/
+        .floor_selector 
+        {
+            text-align: center;
+            padding-top: 20px;
+        }
+        /*контейнер и карта соединение*/
+        .map_and_buttons 
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 180px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        /*расположение кнопок*/
+        .floor_buttons 
+        {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        /*стиль кнопки*/
+        .floor_button 
+        {
+            background-color: white;
+            color: #0655ff;
+            border: 2px solid #0655ff;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 200px;
+            border-radius: 10px;
+        }
+        /*наведение на кнопки*/
+        .floor_button:hover 
+        {
+            background-color: #e6f0ff;
+            border-color: #0655ff;
+        }
+    </style>
+</head>
+<body>
+     
+    <input type="text" placeholder="Откуда..." style="padding:10px; width:200px;">
+    <input type="text" placeholder="Куда..." style="padding:10px; width:200px;">
+    <button onclick="nazhatie_knopki()" style="padding:8px 16px; font-size:16px; background-color: #4A92F6">
+        Построить маршрут
+    </button>
+    <img src="logo.png" alt="Эмблема" class="top-right-emblem">
+    <div class="floor_selector">
+        <div class="map_and_buttons">
+            <div class="map_container">
+                <img id="map_floor" src="floor2.png" alt="этаж">
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div style="color: #004869; padding: 20px 20px; border-radius: 100px; margin-bottom: 10px; font-size: 20px;">
+                    Корпуса А, В, С
+                </div>
+                <div class="floor_buttons">
+                    <button class="floor_button" data-floor="1">1 этаж</button>
+                    <button class="floor_button" data-floor="2">2 этаж</button>
+                    <button class="floor_button" data-floor="3">3 этаж</button>
+                    <button class="floor_button" data-floor="4">4 этаж</button>
+                    <button class="floor_button" data-floor="5">5 этаж</button>
+                    <button class="floor_button" data-floor="6">6 этаж</button>
+                    <button class="floor_button" data-floor="7">7 этаж</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function nazhatie_knopki() 
+        {
+            alert('Маршрут построен');
+        }
+        // картинки этажей
+        let etazhi_kartinki = 
+        {
+            1: 'floor1.png',
+            2: 'floor2.png',
+            3: 'floor3.png',
+            4: 'floor4.png',
+            5: 'floor5.png',
+            6: 'floor6.png',
+            7: 'floor7.png'
+        };
+        
+        let karta_img = document.getElementById('map_floor');
+        let knopki_vse = document.querySelectorAll('.floor_button');
+        let konteyner = document.querySelector('.map_container');
+        
+        // маштабирование конейнера
+        let tekuwiy_masshtab = 1;
+        let shag_masshtaba = 0.01;
+        let min_masshtab = 0.2;      
+        let max_masshtab = 3;         
+        
+        // сброс маштаба при обновлении
+        function ustanovit_masshtab(val, nado_sbrosit = false) 
+        {
+            if (val > max_masshtab) val = max_masshtab;
+            if (val < min_masshtab) val = min_masshtab;
+            tekuwiy_masshtab = val;
+            karta_img.style.transform = 'scale(' + tekuwiy_masshtab + ')';
+            if (nado_sbrosit) 
+            {
+                konteyner.scrollTop = 0;
+                konteyner.scrollLeft = 0;
+            }
+        }
+        
+        // картинка по размеру 
+        function podognat_kartinku() 
+        {
+            if (!karta_img.complete || karta_img.naturalWidth == 0) 
+            {
+                karta_img.onload = () => podognat_kartinku();
+                return;
+            }
+            let shirina_konteynera = konteyner.clientWidth;
+            let vysota_konteynera = konteyner.clientHeight;
+            let shirina_kartinki = karta_img.naturalWidth;
+            let vysota_kartinki = karta_img.naturalHeight;
+            
+            let masshtab_po_shirine = shirina_konteynera / shirina_kartinki;
+            let masshtab_po_vysote = vysota_konteynera / vysota_kartinki;
+            let podognanniy_masshtab = (masshtab_po_shirine < masshtab_po_vysote) ? masshtab_po_shirine : masshtab_po_vysote;
+            // Ограничим максимум 1, чтобы не было слишком крупно
+            if (podognanniy_masshtab > 1) podognanniy_masshtab = 1;
+            ustanovit_masshtab(podognanniy_masshtab, true);
+        }
+        
+        // Обработчик колесика 
+        konteyner.addEventListener('wheel', function(sobytie) 
+        {
+            sobytie.preventDefault();
+            let delta_dvizheniya = sobytie.deltaY > 0 ? -shag_masshtaba : shag_masshtaba;
+            let noviy_masshtab = tekuwiy_masshtab + delta_dvizheniya;
+            if (noviy_masshtab > max_masshtab) noviy_masshtab = max_masshtab;
+            if (noviy_masshtab < min_masshtab) noviy_masshtab = min_masshtab;
+            ustanovit_masshtab(noviy_masshtab);
+        });
+        
+        // Переключение этажей 
+        for (let i = 0; i < knopki_vse.length; i++) 
+        {
+            knopki_vse[i].addEventListener('click', function() 
+            {
+                let nomer_etazha = parseInt(this.dataset.floor);
+                karta_img.src = etazhi_kartinki[nomer_etazha];
+                karta_img.onload = () => podognat_kartinku();
+            });
+        }
+        
+        // первая карта по умолчанию
+        karta_img.src = etazhi_kartinki[1];
+        podognat_kartinku();  // вызовется после загрузки картинки 
+    </script>
+</body>
+</html>
