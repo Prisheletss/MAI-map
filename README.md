@@ -14,9 +14,12 @@
 - База данных: SQLite
 - Инструменты: GitHub, Figma
 ## Как запустить проект
-1. Клонировать репозиторий: `git clone https://github.com/Vlada007mskgold/campus-map.git`
-2. открыть папку program, и запустить в ней консоль
-3. ввести в коммандную строку: `php -S localhost:8000`
-4. в браузере открыть: http://localhost:8000/index.php
+1. Клонировать репозиторий: \
+   `git clone https://github.com/Prisheletss/MAI-map` \
+   или \
+   `git clone https://github.com/Vlada007mskgold/campus-map.git` <span style="color:#ff0000">(временно недоступно)</span>
+3. открыть папку program, и запустить в ней консоль
+4. ввести в коммандную строку: `php -S localhost:8000`
+5. в браузере открыть: http://localhost:8000/index.php
 ## Ссылки
 - [Figma-макет](ссылка)
