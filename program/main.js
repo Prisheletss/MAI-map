@@ -101,7 +101,7 @@ function way(start, end, path=[], memory={}, iter=0) {
             //memory[p] = [min(memory[p], memory[start][0] + distance(start, p)), [...path, p]];
         }
         else {
-            document.getElementById('output2').textContent += closest[i];
+            //document.getElementById('output2').textContent += closest[i];
             if (iter == 1) {
                 memory[p] = [distance(start, p), [...path, p]];
             } else {
@@ -140,7 +140,7 @@ function way_draw(start, end) {
     var ans = "";
 
     for (let i = 1; i < w.length; i++) {
-        //ans += w[i].id;
+        ans += w[i].id;
         var p1 = w[i-1].value;
         p1 = p1.split("| ");
 
@@ -171,7 +171,7 @@ function way_draw(start, end) {
         console.log(x1, y1, x2, y2)
     }
 
-    //document.getElementById('output2').textContent += ans;
+    document.getElementById('output2').textContent += ans;
 }
 
 
